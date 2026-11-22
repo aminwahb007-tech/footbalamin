@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MA Football Academy | Management</title>
+<style>
+:root {
+  --bg:#090d0b;
+  --panel:#141b16;
+  --gold:#d8b65d;
+  --green:#238b55;
+  --text:#fff;
+  --muted:#a4ada5;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Arial,Tahoma,sans-serif;
+  background:var(--bg);color:var(--text);
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.layout{display:flex;min-height:100vh}
+.sidebar{
+  width:245px;background:#101611;
+  border-left:1px solid #29342b;
+  padding:25px 15px;flex-shrink:0;
+}
+.brand{padding:10px;margin-bottom:35px}
+.brand h2{color:var(--gold);font-size:20px}
+.brand p{font-size:10px;color:var(--muted);margin-top:7px}
+.menu-title{color:#68766b;font-size:11px;margin:25px 12px 10px}
+.nav{
+  display:block;width:100%;text-align:right;
+  padding:13px 14px;margin:5px 0;
+  color:#b7c0b8;background:transparent;
+  border:0;border-radius:7px;
+}
+.nav:hover,.nav.active{
+  background:#263329;color:var(--gold);
+}
+.main{flex:1;min-width:0;padding:28px}
+.topbar{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:15px;margin-bottom:35px;
+}
+.topbar p{color:var(--muted);font-size:13px;margin-top:7px}
+.avatar{
+  width:43px;height:43px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--gold);color:#111;font-weight:bold;
+}
+.page{display:none}
+.page.active{display:block}
+.heading{margin-bottom:25px}
+.heading h2{font-size:26px;margin-bottom:8px}
+.heading p{color:var(--muted);font-size:13px}
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:16px;margin-bottom:25px;
+}
+.stat,.panel,.player-card{
+  background:var(--panel);
+  border:1px solid #29352c;border-radius:10px;
+}
+.stat{padding:22px}
+.stat span{color:var(--muted);font-size:12px}
+.stat h2{font-size:30px;color:var(--gold);margin-top:15px}
+.panel{padding:22px;margin-bottom:22px}
+.panel h3{font-size:17px;margin-bottom:18px}
+table{width:100%;border-collapse:collapse;min-width:500px}
+th,td{
+  padding:15px 10px;text-align:right;
+  border-bottom:1px solid #303a31;font-size:13px;
+}
+th{color:var(--gold)}
+.table-wrap{overflow-x:auto}
+.status{
+  color:#7ce0a0;background:#173a27;
+  padding:5px 10px;border-radius:20px;font-size:11px;
+}
+.btn{
+  border:0;padding:11px 17px;
+  border-radius:6px;font-weight:bold;
+}
+.gold{background:var(--gold);color:#111}
+.green{background:var(--green);color:white}
+.dark{background:#29342b;color:white}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+.grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:17px;
+}
+.player-card{padding:20px}
+.player-avatar{
+  width:55px;height:55px;border-radius:50%;
+  background:#304735;display:grid;
+  place-items:center;font-size:25px;margin-bottom:15px;
+}
+.player-card h3{margin-bottom:7px}
+.player-card p{font-size:12px;color:var(--muted);margin:6px 0}
+.form-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:15px;
+}
+.field{display:flex;flex-direction:column;gap:8px}
+.field.full{grid-column:1/-1}
+.field label{font-size:13px;color:#c7d0c8}
+.field input,.field select,.field textarea{
+  background:#0b110d;border:1px solid #354238;
+  color:white;border-radius:6px;padding:13px;width:100%;
+}
+.field textarea{min-height:90px;resize:vertical}
+.notice{
+  padding:14px;background:#352d18;
+  border:1px solid #79632e;color:#f0d68b;
+  border-radius:7px;font-size:12px;
+  line-height:1.8;margin-bottom:20px;
+}
+footer{color:#788078;text-align:center;font-size:11px;padding:25px}
+@media(max-width:900px){
+ .sidebar{width:190px}
+ .stats{grid-template-columns:repeat(2,1fr)}
+ .grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+ .layout{display:block}
+ .sidebar{width:100%;padding:12px}
+ .brand{margin-bottom:10px}
+ .menu-title{margin-top:12px}
+ .nav{width:auto;display:inline-block;padding:10px;font-size:12px}
+ .main{padding:18px 12px}
+ .stats{gap:9px}
+ .stat{padding:15px}
+ .stat h2{font-size:23px}
+ .grid{grid-template-columns:1fr}
+ .form-grid{grid-template-columns:1fr}
+ .field.full{grid-column:auto}
+ .topbar h2{font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<aside class="sidebar">
+  <div class="brand">
+    <h2>⚽ MA ACADEMY</h2>
+    <p>FOOTBALL MANAGEMENT SYSTEM</p>
+  </div>
+
+  <div class="menu-title">MAIN MENU</div>
+  <button class="nav active" onclick="showPage('dashboard',this)">▦ الرئيسية</button>
+  <button class="nav" onclick="showPage('players',this)">⚽ اللاعبون</button>
+  <button class="nav" onclick="showPage('registration',this)">＋ التسجيل</button>
+  <button class="nav" onclick="showPage('scouting',this)">◎ اكتشاف المواهب</button>
+  <button class="nav" onclick="showPage('settings',this)">⚙ الإعدادات</button>
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+  <div>
+    <h2>لوحة إدارة الأكاديمية</h2>
+    <p>Mohamed Amine Football Academy · Marrakech</p>
+  </div>
+  <div class="avatar">MA</div>
+</header>
+
+<!-- DASHBOARD -->
+<section class="page active" id="dashboard">
+  <div class="heading">
+    <h2>مرحباً بك في الأكاديمية 👋</h2>
+    <p>نظرة عامة على إدارة الأكاديمية</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <span>إجمالي اللاعبين</span>
+      <h2>120</h2>
+    </div>
+    <div class="stat">
+      <span>المدربون</span>
+      <h2>8</h2>
+    </div>
+    <div class="stat">
+      <span>طلبات التسجيل</span>
+      <h2>15</h2>
+    </div>
+    <div class="stat">
+      <span>البرامج التدريبية</span>
+      <h2>4</h2>
+    </div>
+  </div>
+
+  <div class="notice">
+    هذه أرقام تجريبية للعرض فقط، وليست بيانات حقيقية.
+  </div>
+
+  <div class="panel">
+    <h3>آخر اللاعبين المسجلين</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>اللاعب</th>
+            <th>المركز</th>
+            <th>الفئة</th>
+            <th>الحالة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Player One</td>
+            <td>مهاجم</td>
+            <td>U17</td>
+            <td><span class="status">نشط</span></td>
+          </tr>
+          <tr>
+            <td>Player Two</td>
+            <td>حارس مرمى</td>
+            <td>U15</td>
+            <td><span class="status">نشط</span></td>
+          </tr>
+          <tr>
+            <td>Player Three</td>
+            <td>وسط ميدان</td>
+            <td>U19</td>
+            <td><span class="status">نشط</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- PLAYERS -->
+<section class="page" id="players">
+  <div class="heading">
+    <h2>إدارة اللاعبين</h2>
+    <p>نماذج لملفات اللاعبين داخل الأكاديمية</p>
+  </div>
+
+  <div class="notice">
+    اللاعبون المعروضون هنا بيانات افتراضية للتجربة.
+  </div>
+
+  <div class="grid">
+    <div class="player-card">
+      <div class="player-avatar">⚽</div>
+      <h3>Player One</h3>
+      <p>المركز: مهاجم</p>
+      <p>العمر الرياضي: U17</p>
+      <p>الرقم: 09</p>
+      <span class="status">نشط</span>
+    </div>
+
+    <div class="player-card">
+      <div class="player-avatar">🧤</div>
+      <h3>Player Two</h3>
+      <p>المركز: حارس مرمى</p>
+      <p>الفئة: U15</p>
+      <p>الرقم: 01</p>
+      <span class="status">نشط</span>
+    </div>
+
+    <div class="player-card">
+      <div class="player-avatar">🏃</div>
+      <h3>Player Three</h3>
+      <p>المركز: وسط ميدان</p>
+      <p>الفئة: U19</p>
+      <p>الرقم: 08</p>
+      <span class="status">نشط</span>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRATION -->
+<section class="page" id="registration">
+  <div class="heading">
+    <h2>تسجيل لاعب جديد</h2>
+    <p>نموذج تجريبي لطلبات الانضمام</p>
+  </div>
+
+  <div class="notice">
+    النموذج حالياً واجهة تجريبية فقط. لن يتم إرسال أو حفظ المعلومات.
+    سنربطه بقاعدة بيانات آمنة في المرحلة القادمة.
+    لا تدخل معلومات شخصية حقيقية دابا.
+  </div>
+
+  <div class="panel">
+    <form onsubmit="demoSubmit(event)">
+      <div class="form-grid">
+        <div class="field">
+          <label>اسم اللاعب</label>
+          <input required placeholder="اسم تجريبي">
+        </div>
+
+        <div class="field">
+          <label>العمر</label>
+          <input type="number" min="5" max="40" required placeholder="العمر">
+        </div>
+
+        <div class="field">
+          <label>المركز</label>
+          <select required>
+            <option value="">اختار المركز</option>
+            <option>حارس مرمى</option>
+            <option>مدافع</option>
+            <option>وسط ميدان</option>
+            <option>مهاجم</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>الفئة</label>
+          <select>
+            <option>U13</option>
+            <option>U15</option>
+            <option>U17</option>
+            <option>U19</option>
+            <option>Senior</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label>معلومات إضافية</label>
+          <textarea placeholder="معلومات تجريبية"></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn gold" type="submit">تجربة التسجيل</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- SCOUTING -->
+<section class="page" id="scouting">
+  <div class="heading">
+    <h2>اكتشاف المواهب</h2>
+    <p>Scouting & Talent Development</p>
+  </div>
+
+  <div class="panel">
+    <h3>نظام اكتشاف المواهب</h3>
+    <p style="color:#a4ada5;line-height:2">
+      هذا القسم مخصص مستقبلاً لتقييم اللاعبين ومتابعة
+      تطورهم ومهاراتهم التقنية والبدنية والتكتيكية.
+    </p>
+  </div>
+
+  <div class="grid">
+    <div class="player-card">
+      <h3>⚽ المهارات التقنية</h3>
+      <p>التمرير، التسديد والتحكم بالكرة.</p>
+    </div>
+    <div class="player-card">
+      <h3>🏃 الأداء البدني</h3>
+      <p>السرعة والتحمل واللياقة.</p>
+    </div>
+    <div class="player-card">
+      <h3>🧠 الفهم التكتيكي</h3>
+      <p>التمركز واتخاذ القرارات.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SETTINGS -->
+<section class="page" id="settings">
+  <div class="heading">
+    <h2>إعدادات الأكاديمية</h2>
+    <p>المعلومات الأساسية للمنصة</p>
+  </div>
+
+  <div class="panel">
+    <h3>هوية الأكاديمية</h3>
+    <p style="margin:12px 0;color:#ccc">الاسم: Mohamed Amine Football Academy</p>
+    <p style="margin:12px 0;color:#ccc">المدينة: Marrakech, Morocco</p>
+    <p style="margin:12px 0;color:#ccc">اللغة: العربية</p>
+    <p style="margin:12px 0;color:#ccc">النظام: الإصدار التجريبي</p>
+  </div>
+
+  <div class="notice">
+    لوحة الإدارة الحالية ليست محمية بتسجيل دخول.
+    لا تستعملها لإدارة بيانات حقيقية قبل إعداد المصادقة والصلاحيات.
+  </div>
+</section>
+
+<footer>
+  MOHAMED AMINE FOOTBALL ACADEMY · 2026
+</footer>
+
+</main>
+</div>
+
+<script>
+function showPage(id,button){
+  document.querySelectorAll('.page').forEach(page=>{
+    page.classList.remove('active');
+  });
+
+  document.getElementById(id).classList.add('active');
+
+  document.querySelectorAll('.nav').forEach(item=>{
+    item.classList.remove('active');
+  });
+
+  button.classList.add('active');
+}
+
+function demoSubmit(event){
+  event.preventDefault();
+  alert('هذا نموذج تجريبي. التسجيل الحقيقي لم يتم تفعيله بعد.');
+}
+</script>
+
+</body>
+</html>
