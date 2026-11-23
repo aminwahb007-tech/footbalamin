@@ -123,23 +123,57 @@ footer{text-align:center;padding:30px;background:#101512;color:#aaa}
 <p style="margin-top:10px">Made for the love of football ⚽</p>
 </footer>
 
-<script>
-document.getElementById('joinForm').addEventListener('submit',function(e){
-e.preventDefault();
-const data={
-name:document.getElementById('name').value,
-age:document.getElementById('age').value,
-position:document.getElementById('position').value,
-phone:document.getElementById('phone').value,
-message:document.getElementById('message').value
-};
-let applications=JSON.parse(localStorage.getItem('applications')||'[]');
-applications.push(data);
-localStorage.setItem('applications',JSON.stringify(applications));
-document.getElementById('result').textContent='Application saved on this device!';
-this.reset();
+
+<script type="module">
+import { createClient } from
+'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = 'https://xhnesvqwgnqfdtvjcskw.supabase.co';
+
+const SUPABASE_KEY = 'sb_publishable_agBWc4MFk-IBulHijZp9OQ_SXG_N4E6';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const form = document.getElementById('joinForm');
+const result = document.getElementById('result');
+const button = form.querySelector('button');
+
+form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    button.disabled = true;
+    button.textContent = 'SENDING...';
+    result.textContent = 'Please wait...';
+
+    const data = {
+        full_name: document.getElementById('name').value.trim(),
+        age: Number(document.getElementById('age').value),
+        position: document.getElementById('position').value,
+        phone: document.getElementById('phone').value.trim(),
+        message: document.getElementById('message').value.trim()
+    };
+
+    try {
+        const { error } = await supabase
+            .from('players')
+            .insert([data]);
+
+        if (error) throw error;
+
+        result.textContent = 'Application submitted successfully! ⚽';
+        form.reset();
+
+    } catch (error) {
+        console.error(error);
+        result.textContent = 'Error: ' + error.message;
+
+    } finally {
+        button.disabled = false;
+        button.textContent = 'SEND APPLICATION';
+    }
 });
 </script>
+
 
 </body>
 </html>
