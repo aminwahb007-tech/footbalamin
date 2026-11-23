@@ -145,12 +145,18 @@ form.addEventListener('submit', async function(e) {
     button.textContent = 'SENDING...';
     result.textContent = 'Please wait...';
 
-    const data = {
-        full_name: document.getElementById('name').value.trim(),
-        age: Number(document.getElementById('age').value),
-        position: document.getElementById('position').value,
-        phone: document.getElementById('phone').value.trim(),
-        message: document.getElementById('message').value.trim()
+    
+const playerName = document.getElementById('name').value.trim();
+
+const data = {
+    name: playerName,
+    full_name: playerName,
+    age: Number(document.getElementById('age').value),
+    position: document.getElementById('position').value,
+    phone: document.getElementById('phone').value.trim(),
+    message: document.getElementById('message').value.trim()
+};
+
     };
 
     try {
